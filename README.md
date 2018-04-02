@@ -57,3 +57,8 @@ A 3rd order polynomial was fitted on the waypoints provided by the simulator. To
 
 #### MPC with latency:
 The MPC worked well for the chosen N and dt values without latency and reference states of x, y and psi set to 0. To deal with the latency, I first tried to play with the weight associated with the different cost parameters. Specifically, I penalized subsquent steering angle parameters to be really high. However this still did not result in a stable system. Then I looked how to better set the reference states when solving for the MPC optimization problem. To do this, I used the kinematics equations as shown above. Instead of setting x, y, psi to 0 and v to the current v, we can use the kinematics equations to calculate a 'future' state for delta time set to the latency time. These incremental values make a big difference in how we initialize the states for the MPC problem and take the latency into account by computing a future state as a reference state.
+
+#### Links that helped:
+* https://youtu.be/bOQuhpz3YfU
+* https://discussions.udacity.com/t/how-to-incorporate-latency-into-the-model/257391/104
+
