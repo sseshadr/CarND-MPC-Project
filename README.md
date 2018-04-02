@@ -25,6 +25,7 @@ A kinematics vehicle model was used to predict the system behavior. The states o
 * Velocity (v)
 
 These are calculated using the following equations where a(t) and delta(t) are actuator varibales. L_f is a system variable that is the distance between the center of mass of the vehicle and it's front axle. 
+
 ![alt text][image1]
 
 Next, we append the error terms.
@@ -32,6 +33,7 @@ Next, we append the error terms.
 * Heading error (epsi)
 
 These are calculated using the following equations:
+
 ![alt text][image2]
 ![alt text][image3]
 
