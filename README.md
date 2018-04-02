@@ -23,12 +23,14 @@ A kinematics vehicle model was used to predict the system behavior. The states o
 * Position (x, y)
 * Heading (psi)
 * Velocity (v)
+
 These are calculated using the following equations where a(t) and delta(t) are actuator varibales. L_f is a system variable that is the distance between the center of mass of the vehicle and it's front axle. 
 ![alt text][image1]
 
 Next, we append the error terms.
 * Cross track error (cte)
 * Heading error (epsi)
+
 These are calculated using the following equations:
 ![alt text][image2]
 ![alt text][image3]
@@ -37,12 +39,15 @@ So in total we have 6 states that we track.
 
 #### Timestep Length and Elapsed Duration (N & dt):
 The rule of thumb while choosing N and dt primarily is a tradeoff between computation effort required to solve the optimization problem and the length of the future horizon that we would like to keep track (N) and the resolution of these predictions (dt). With this, we can draw the following table to better understand how they affect each other.
+
 ![alt text][image4]
 
 So we can see that to be able to predict well, we would need to invest in computation time. Originally, I started with an N of 25 and dt of 0.01 (1.25s on the horizon), and the computation effort was too much to result in a stable loop as shown below.
+
 ![alt text][image5]
 
 I reduced N and increased dt to 10 and 0.1 respectively (1s on the horizon) and was able to get a stable behavior as shown below.
+
 ![alt text][image6]
 
 #### Polynomial fitting and MPC preprocessing:
