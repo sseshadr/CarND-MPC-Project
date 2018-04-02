@@ -133,23 +133,25 @@ int main() {
 		  Eigen::Map<Eigen::VectorXd> ptsyT(ptry, ptsy.size());
 		  auto coeffs = polyfit(ptsxT, ptsyT, 3);
 
-		  // Predict State to account for latency in 100ms
-		  double delayT = 0.1;
-		  psi = 0 + (v * steer_value * delayT) / Lf;
-		  px = 0 + (v * cos(psi) * delayT);
-		  py = 0 + (v * sin(psi) * delayT);
-		  v = v + (throttle_value * delayT);
-
-		  // Calculate Cross Track Error
-		  double cte = polyeval(coeffs, 0);
+		  // Calculate Current Cross Track and Orientation Errors
+		  double cte = polyeval(coeffs, 0); // This is for no latency case
+		  double epsi = -atan(coeffs[1]); // This is for no latency case
 		  
-		  // Calculate Orientation Error
-		  double epsi = -atan(coeffs[1]);
+		  // Calculate Future Cross Track and Orientation Errors
+		  double delayT = 0.1;
+		  double ctet1 = cte + (v * sin(epsi) * delayT); // This is for the latency case
+		  double epsit1 = epsi + (v * steer_value * delayT) / Lf; // This is for the latency case
+
+		  // Predict x, y, psi and v to account for latency in 100ms
+		  px = 0 + (v * cos(0) * delayT);
+		  py = 0 + (v * sin(0) * delayT);
+		  psi = 0 + (v * steer_value * delayT) / Lf;
+		  v = v + (throttle_value * delayT);
 
 		  // Create State Vector
 		  Eigen::VectorXd state(6);
 		  // state << 0, 0, 0, v, cte, epsi; // This is for no latency case
-		  state << px, py, psi, v, cte, epsi; // This is for the latency case
+		  state << px, py, psi, v, ctet1, epsit1; // This is for the latency case
 
 		  // Solve MPC Optimization Problem 
 		  auto vars = mpc.Solve(state, coeffs);
